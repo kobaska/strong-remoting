@@ -75,4 +75,20 @@ module.exports = function(ctx) {
       [[1, 2], ERROR_BAD_REQUEST],
     ]);
   });
+
+  describe('json body - object - allowArray: true', function() {
+    verifyTestCases({ arg: 'data', type: 'object', allowArray: true }, [
+      // should accept regular objects, plus array of objects
+      [[{}]], // an empty object is a valid value too
+      [[{ x: '' }]],
+      [[{ x: null }]],
+      [[{ x: 1 }, { y: 'string' }]],
+
+      // invalid
+      // array of array of object is invalid
+      [[{}, [{}]], ERROR_BAD_REQUEST],
+      [[{}, 3.1415], ERROR_BAD_REQUEST],
+      [[{}, 'non-object'], ERROR_BAD_REQUEST],
+    ]);
+  });
 };
